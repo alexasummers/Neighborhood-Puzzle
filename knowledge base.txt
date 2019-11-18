@@ -1,0 +1,53 @@
+nationality(Nationality) :- member(Nationality, [canadian, colombian, english, african, vietnamese]).
+color(Color) :- member(Color, [blue, green, red, white, yellow]).
+pet(Pet) :- member(Pet, [cat, dog, hamster, horse, lizard]).
+beverage(Beverage) :- member(Beverage, [coffee, juice, milk, tea, water]).
+team(Team) :- member(Team, [broncos, chargers, chiefs, raiders, ravens]).
+
+resident([Nationality, ColorOfHouse, TypeOfPet, FavoriteBeverage, FavoriteTeam]) :- nationality(Nationality), color(ColorOfHouse), pet(TypeOfPet), beverage(FavoriteBeverage), team(FavoriteTeam).
+
+has(Characteristic, Resident) :- nationality(Characteristic), Resident = [Characteristic, _, _, _, _].
+has(Characteristic, Resident) :- color(Characteristic), Resident = [_, Characteristic, _, _, _].
+has(Characteristic, Resident) :- pet(Characteristic), Resident = [_, _, Characteristic, _, _].
+has(Characteristic, Resident) :- beverage(Characteristic), Resident = [_, _, _, Characteristic, _].
+has(Characteristic, Resident) :- team(Characteristic), Resident = [_, _, _, _, Characteristic].
+
+onePerson(A, B, Person) :- has(A, Resident), has(B, Resident), member(Resident, Person).
+
+farEnd(A, Person) :- has(A, Resident), Person = [_, _, _, _, Resident].
+leftEnd(A, Person) :- has(A, Resident), Person = [Resident, _, _, _, _].
+secondToLast(A, Person) :- has(A, Resident), Person = [_, _, _, Resident, _].
+leftOf(A, B, Person) :- has(A, ResidentA), has(B, ResidentB), nextto(ResidentA, ResidentB, Person).
+neighbor(A, B, Person) :- leftOf(A, B, Person); leftOf(B, A, Person).
+
+solution(Person) :-
+  Person = [_, _, _, _, _],
+
+  onePerson(canadian, lizard, Person),
+  onePerson(raiders, dog, Person),
+  neighbor(red, vietnamese, Person),
+  onePerson(cat, english, Person),
+  neighbor(juice, dog, Person),
+  onePerson(milk, canadian, Person),
+  leftEnd(blue, Person),
+  onePerson(horse, vietnamese, Person),
+  onePerson(juice, yellow, Person),
+  neighbor(dog, blue, Person),
+  onePerson(ravens, hamster, Person),
+  onePerson(african, tea, Person),
+  secondToLast(red, Person),
+  not(neighbor(cat, juice, Person)),
+  neighbor(raiders, horse, Person),
+  onePerson(red, ravens, Person),
+  onePerson(canadian, green, Person),
+  onePerson(chargers, blue, Person),
+  onePerson(white, african, Person),
+  onePerson(coffee, cat, Person),
+  farEnd(milk, Person),
+  onePerson(broncos, yellow, Person),
+  onePerson(colombian, red, Person),
+  onePerson(canadian, chiefs, Person),
+
+  maplist(resident, Person),
+  flatten(_Resident, Stuff),
+  is_set(Stuff).

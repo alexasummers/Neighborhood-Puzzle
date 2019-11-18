@@ -1,0 +1,5 @@
+[[english, blue, cat, coffee, chargers], 
+[african, white, dog, tea, raiders], 
+[vietnamese, yellow, horse, juice, broncos], 
+[colombian, red, hamster, coffee, ravens], 
+[canadian, green, lizard, milk, chiefs]]
